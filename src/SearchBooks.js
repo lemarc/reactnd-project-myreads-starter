@@ -16,9 +16,11 @@ export default class SearchBooks extends Component {
 			this.setState({query: query})
 			// set the results separately to prevent overwriting the query while waiting for search
 			this.props.search(query,20).then( results => {
+				// returned results won't show if they are already on a shelf - check if they are
 				results.constructor===Array && results.forEach( (resultBook,i) => {
+					resultBook.shelf='none' // Some results had a shelf attribute even if it wasn't on my shelf
 					this.props.books.forEach( shelvedBook => {
-						resultBook.id === shelvedBook.id && (results[i].shelf = shelvedBook.shelf) && console.log(shelvedBook.shelf)
+						resultBook.id === shelvedBook.id && (results[i].shelf = shelvedBook.shelf)
 					})
 				})
 				//console.log(results)
@@ -29,12 +31,20 @@ export default class SearchBooks extends Component {
 		}
 	}
 
+	updateResultsShelf = (book, shelf) => {
+		this.setState( state => {
+			const i = state.results.indexOf(book)
+			book.shelf=shelf
+			state.results[i]=book
+			return { results: state.results }
+		})
+	}
+
 	clearQuery = () => {
 		this.setState({query: '',results:[]})
 	}
 
 	render() {	
-		console.log(this.state.results)
 		return (
 			<div className="search-books">
 				<div className="search-books-bar">
@@ -54,7 +64,7 @@ export default class SearchBooks extends Component {
 				</div>
 				<div className="search-books-results">
 					{this.state.results.constructor === Array && <ol className="books-grid">
-						{this.state.results.map((book,i)=><li key={i}><Book book={book} move={this.props.move}/></li>)}
+						{this.state.results.map((book,i)=><li key={i}><Book book={book} move={this.props.move} update={this.updateResultsShelf}/></li>) }
 					</ol>}
 				</div>
 			</div>

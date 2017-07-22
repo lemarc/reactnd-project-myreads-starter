@@ -2,14 +2,17 @@ import React, { Component } from 'react'
 
 export default class Book extends Component {
 	render() {
-		const { book, move } = this.props
+		const { book, move, update } = this.props
 		return (
 			<div className="book">
 				<div className="book-top">
 					<img className='book-cover' src={book.imageLinks.smallThumbnail} width='auto' alt={book.title} />
 					<div className="book-shelf-changer">
 						<select value={book.shelf} onChange={
-							e=>move(book,e.target.value)
+							e=>{
+								update && update(book, e.target.value)
+								move(book,e.target.value)
+							}
 						}>
 							<option value="" disabled>Move to...</option>
 							<option value="currentlyReading">Currently Reading</option>
