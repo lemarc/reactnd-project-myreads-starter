@@ -11,7 +11,15 @@ export default class BooksApp extends Component {
 	state = { books: [] }
 
 	componentDidMount() {
+		this.getBooks()
+	}
+
+	getBooks= () => {
 		BooksAPI.getAll().then( books => this.setState({books}) )
+	}
+
+	moveBook= (book, shelf) => {
+		BooksAPI.update(book, shelf).then( () => this.getBooks() )
 	}
 
 	render() {
@@ -20,11 +28,11 @@ export default class BooksApp extends Component {
 			<div className="app">
 
 				<Route path='/search' render={ history => (
-					<SearchBooks />
+					<SearchBooks search={BooksAPI.search} books={this.state.books} move={this.moveBook}/>
 				)}/>
 
 				<Route exact path='/' render={ history => (
-					<ListBooks books={this.state.books}/>
+					<ListBooks books={this.state.books} move={this.moveBook}/>
 				)}/>
 
 			</div>

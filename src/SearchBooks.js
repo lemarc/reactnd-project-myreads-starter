@@ -7,19 +7,34 @@ import Book from './Book'
 export default class SearchBooks extends Component {
 
 	state = {
-		query:''
+		query:'',
+		results:[]
 	}
 
 	updateQuery = query => {
-		this.setState({query: query})
+		if (query) {
+			this.setState({query: query})
+			// set the results separately to prevent overwriting the query while waiting for search
+			this.props.search(query,20).then( results => {
+				results.constructor===Array && results.forEach( (resultBook,i) => {
+					this.props.books.forEach( shelvedBook => {
+						resultBook.id === shelvedBook.id && (results[i].shelf = shelvedBook.shelf) && console.log(shelvedBook.shelf)
+					})
+				})
+				//console.log(results)
+				this.setState({results: results})
+			})
+		} else {
+			this.clearQuery()
+		}
 	}
 
 	clearQuery = () => {
-		this.setState({query: ''})
+		this.setState({query: '',results:[]})
 	}
 
-	render() {
-		let results = []
+	render() {	
+		console.log(this.state.results)
 		return (
 			<div className="search-books">
 				<div className="search-books-bar">
@@ -33,14 +48,14 @@ export default class SearchBooks extends Component {
 							However, remember that the BooksAPI.search method DOES search by title or author. So, don't worry if
 							you don't find a specific author or title. Every search is limited by search terms.
 						*/}
-						<input type="text" placeholder="Search by title or author"/>
+						<input type="text" placeholder="Search by title or author" value={this.state.query} onChange={e=>this.updateQuery(e.target.value)}/>
 
 					</div>
 				</div>
 				<div className="search-books-results">
-					<ol className="books-grid">
-						{results.map((book,i)=><li key={i}><Book book={book}/></li>)}
-					</ol>
+					{this.state.results.constructor === Array && <ol className="books-grid">
+						{this.state.results.map((book,i)=><li key={i}><Book book={book} move={this.props.move}/></li>)}
+					</ol>}
 				</div>
 			</div>
 		)

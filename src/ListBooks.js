@@ -6,7 +6,7 @@ import Bookshelf from './Bookshelf'
 
 export default class ListBooks extends Component {
 	render() {
-		const { books } = this.props
+		const { books, move } = this.props
 
 		return (
 			<div className='list-books'>
@@ -14,9 +14,9 @@ export default class ListBooks extends Component {
 					<h1>MyReads</h1>
 				</div>
 				<div className='list-books-content'>
-					<Bookshelf shelf='Currently Reading' books={books.filter(book=>book.shelf==='currentlyReading')}/>
-					<Bookshelf shelf='Want to Read' books={books.filter(book=>book.shelf==='wantToRead')}/>
-					<Bookshelf shelf='Read' books={books.filter(book=>book.shelf==='read')}/>
+					<Bookshelf move={move} shelf='Currently Reading' books={books.filter(book=>book.shelf==='currentlyReading')}/>
+					<Bookshelf move={move} shelf='Want to Read' books={books.filter(book=>book.shelf==='wantToRead')}/>
+					<Bookshelf move={move} shelf='Read' books={books.filter(book=>book.shelf==='read')}/>
 				</div>
 				<div className='open-search'>
 					<Link to='/search'>Add a book</Link>
@@ -26,7 +26,7 @@ export default class ListBooks extends Component {
 	}
 }
 
-
+/*
 class ListBooksSample extends Component {
 	render() {
 		return (
@@ -193,3 +193,4 @@ class ListBooksSample extends Component {
 	}
 }
 export { ListBooksSample }
+*/
