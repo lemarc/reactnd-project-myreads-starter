@@ -20,6 +20,7 @@ export default class SearchBooks extends Component {
 				results.constructor===Array && results.forEach( (resultBook,i) => {
 					resultBook.shelf='none' // Some results had a shelf attribute even if it wasn't on my shelf
 					this.props.books.forEach( shelvedBook => {
+						// Assign the proper shelf to any books on my shelves
 						resultBook.id === shelvedBook.id && (results[i].shelf = shelvedBook.shelf)
 					})
 				})
@@ -32,6 +33,7 @@ export default class SearchBooks extends Component {
 	}
 
 	updateResultsShelf = (book, shelf) => {
+		// Instead of redoing the search when shelf is changed, just update the results directly
 		this.setState( state => {
 			const i = state.results.indexOf(book)
 			book.shelf=shelf
