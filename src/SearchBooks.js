@@ -14,7 +14,7 @@ export default class SearchBooks extends Component {
 	updateQuery = query => {
 		if (query) {
 			this.setState({query: query})
-			// set the results separately to prevent overwriting the query while waiting for search
+			// set the results separately to prevent overwriting the query while waiting for search results
 			this.props.search(query,20).then( results => {
 				// returned results won't show if they are already on a shelf - check if they are
 				results.constructor===Array && results.forEach( (resultBook,i) => {
@@ -46,10 +46,10 @@ export default class SearchBooks extends Component {
 
 	render() {	
 		return (
-			<div className="search-books">
-				<div className="search-books-bar">
+			<div className='search-books'>
+				<div className='search-books-bar'>
 					<Link to='/' className='close-search'>Close</Link>
-					<div className="search-books-input-wrapper">
+					<div className='search-books-input-wrapper'>
 						{/* 
 							NOTES: The search from BooksAPI is limited to a particular set of search terms.
 							You can find these search terms here:
@@ -58,12 +58,12 @@ export default class SearchBooks extends Component {
 							However, remember that the BooksAPI.search method DOES search by title or author. So, don't worry if
 							you don't find a specific author or title. Every search is limited by search terms.
 						*/}
-						<input type="text" placeholder="Search by title or author" value={this.state.query} onChange={e=>this.updateQuery(e.target.value)}/>
+						<input type='text' placeholder='Search by title or author' value={this.state.query} onChange={e=>this.updateQuery(e.target.value)}/>
 
 					</div>
 				</div>
-				<div className="search-books-results">
-					{this.state.results.constructor === Array && <ol className="books-grid">
+				<div className='search-books-results'>
+					{this.state.results.constructor === Array && <ol className='books-grid'>
 						{this.state.results.map((book,i)=><li key={i}><Book book={book} move={this.props.move} update={this.updateResultsShelf}/></li>) }
 					</ol>}
 				</div>
