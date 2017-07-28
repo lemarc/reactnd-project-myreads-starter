@@ -4,7 +4,7 @@ import Book from './Book'
 
 export default class Bookshelf extends Component {
 	render() {
-		const {shelf, books, move} = this.props
+		const { shelf, books, move } = this.props
 		
 		return (
 			<div className='bookshelf'>

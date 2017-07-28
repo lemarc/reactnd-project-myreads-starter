@@ -16,37 +16,31 @@ export default class SearchBooks extends Component {
 			this.setState({query: query})
 			// set the results separately to prevent overwriting the query while waiting for search results
 			this.props.search(query,20).then( results => {
-				// returned results won't show if they are already on a shelf - check if they are
-				results.constructor===Array && results.forEach( (resultBook,i) => {
-					resultBook.shelf='none' // Some results had a shelf attribute even if it wasn't on my shelf
-					this.props.books.forEach( shelvedBook => {
-						// Assign the proper shelf to any books on my shelves
-						resultBook.id === shelvedBook.id && (results[i].shelf = shelvedBook.shelf)
-					})
-				})
-				//console.log(results)
-				this.setState({results: results})
+				results.constructor===Array && this.setState({results:  results})
 			})
 		} else {
 			this.clearQuery()
 		}
 	}
 
-	updateResultsShelf = (book, shelf) => {
-		// Instead of redoing the search when shelf is changed, just update the results directly
-		this.setState( state => {
-			const i = state.results.indexOf(book)
-			book.shelf=shelf
-			state.results[i]=book
-			return { results: state.results }
-		})
-	}
-
 	clearQuery = () => {
 		this.setState({query: '',results:[]})
 	}
 
-	render() {	
+	render() {
+		const { results, query } = this.state
+		const { books, move } = this.props
+
+		// Returned results won't show if they are already on a shelf - check if they are
+		// Performing this check in render so it changes when shelved books are moved without repeating api search
+		results.forEach( resultBook => {
+			resultBook.shelf='none' // Some results had a shelf attribute even if it wasn't on my shelf
+			books.forEach( shelvedBook => {
+				// Assign the proper shelf attribute to any books on my shelves
+				resultBook.id === shelvedBook.id && (resultBook.shelf = shelvedBook.shelf)
+			})
+		})
+
 		return (
 			<div className='search-books'>
 				<div className='search-books-bar'>
@@ -60,14 +54,14 @@ export default class SearchBooks extends Component {
 							However, remember that the BooksAPI.search method DOES search by title or author. So, don't worry if
 							you don't find a specific author or title. Every search is limited by search terms.
 						*/}
-						<input type='text' placeholder='Search by title or author' value={this.state.query} onChange={e=>this.updateQuery(e.target.value)}/>
+						<input type='text' placeholder='Search by title or author' value={query} onChange={e=>this.updateQuery(e.target.value)}/>
 
 					</div>
 				</div>
 				<div className='search-books-results'>
-					{this.state.results.constructor === Array && <ol className='books-grid'>
-						{this.state.results.map((book,i)=><li key={i}><Book book={book} move={this.props.move} update={this.updateResultsShelf}/></li>) }
-					</ol>}
+					<ol className='books-grid'>
+						{results.map((book,i)=><li key={i}><Book book={book} move={move}/></li>) }
+					</ol>
 				</div>
 			</div>
 		)
