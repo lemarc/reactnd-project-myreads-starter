@@ -6,7 +6,10 @@ export default function Book( props ) {
 	return (
 		<div className='book'>
 			<div className='book-top'>
-				<img className='book-cover' src={book.imageLinks.smallThumbnail} width='auto' alt={book.title} />
+				<img className='book-cover'
+					src={book.imageLinks && book.imageLinks.smallThumbnail ? book.imageLinks.smallThumbnail : ''}
+					alt={book.title ? book.title : ''}
+					width='auto' />
 				<div className='book-shelf-changer'>
 					<select value={book.shelf} onChange={ e => move(book,e.target.value) }>
 						<option value='' disabled>Move to...</option>
