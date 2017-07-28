@@ -16,6 +16,8 @@ export default class SearchBooks extends Component {
 			this.setState({query: query})
 			// set the results separately to prevent overwriting the query while waiting for search results
 			this.props.search(query,20).then( results => {
+				// only set the results if it returns an array, an object is returned if no results are found
+				// currently keeps previous results if nothing is returned after you keep typing
 				results.constructor===Array && this.setState({results:  results})
 			})
 		} else {
