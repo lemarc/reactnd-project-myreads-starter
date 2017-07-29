@@ -6,9 +6,13 @@ Download/clone the project and in the project directory install dependencies wit
 `npm -install`
 
 ## Usage
+### Starting the App
 After installation run the project with
 `npm -start`
 The react app will open at http://localhost:3000/
+
+### Search Page
+The API has a limited number of search terms that will return results. Check the SEARCH_TERMS.md file for a list of valid search terms.
 
 ## Contributing
 
