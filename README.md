@@ -3,12 +3,16 @@ This is the MyReads project for Udacity's React Fundamentals course. It is a sim
 
 ## Installation
 Download/clone the project and in the project directory install dependencies with
-`npm -install`
+```
+npm -install
+```
 
 ## Usage
 ### Starting the App
 After installation run the project with
-`npm -start`
+```
+npm -start
+```
 The react app will open at http://localhost:3000/
 
 ### Search Page
